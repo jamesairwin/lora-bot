@@ -1,4 +1,4 @@
-# SDXL Cut-Up LoRA Generator
+# LoRA Bot
 
 ## Description
 
@@ -17,12 +17,12 @@ The project demonstrates Python integration with Automatic1111's API, live image
 
 1. Clone this repository:
 ```
-git clone https://github.com/yourusername/sdxl-cutup-lora-generator.git
+git clone https://github.com/jamesairwin/lora-bot.git
 ```
 
 2. Navigate to the project directory:
 ```
-cd sdxl-cutup-lora-generator
+cd lora-bot
 ```
 
 3. Set up a virtual environment (recommended):
