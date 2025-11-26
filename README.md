@@ -16,59 +16,59 @@ The project demonstrates Python integration with Automatic1111's API, live image
 ## Installation
 
 1. Clone this repository:
-\```
+```
 git clone https://github.com/yourusername/sdxl-cutup-lora-generator.git
-\```
+```
 
 2. Navigate to the project directory:
-\```
+```
 cd sdxl-cutup-lora-generator
-\```
+```
 
 3. Set up a virtual environment (recommended):
-\```
+```
 python -m venv venv
-\```
+```
 
 4. **Activate the virtual environment:**
 
 **Windows:**
-\```
+```
 .\venv\Scripts\activate
-\```
+```
 
 **macOS/Linux:**
-\```
+```
 source venv/bin/activate
-\```
+```
 
 5. Install Python dependencies:
-\```
+```
 pip install -r requirements.txt
-\```
+```
 
 6. Add your text bank:
 
 Create a file named `text_bank.txt` in the project root. Each line should be a descriptive fragment taken from your POV alt-text dataset. Example:
-\```
+```
 reflective polymer surface catching occlusion shadows, volumetric haze
 matte sandstone lattice structure viewed from the ground looking upward
 bioluminescent surface glow diffusing across curved geometry
-\```
+```
 
 The script will automatically mix and recombine these fragments.
 
 7. Add your LoRA weight:
 
 Copy your `.safetensors` LoRA file into:
-\```
+```
 stable-diffusion-webui/models/Lora/
-\```
+```
 
 The script expects the file name:
-\```
+```
 digital_texture-000008.safetensors
-\```
+```
 
 (Change this in the script if your file differs.)
 
@@ -77,27 +77,27 @@ digital_texture-000008.safetensors
 1. Start Automatic1111 with API mode enabled:
 
 **Windows:**
-\```
+```
 webui-user.bat --api
-\```
+```
 
 **macOS/Linux:**
-\```
+```
 ./webui.sh --api
-\```
+```
 
 The script uses:
-\```
+```
 http://127.0.0.1:7860
-\```
+```
 
 Enable progress preview in Automatic1111 (recommended):
 **Settings → API → ✔ Allow progress images**
 
 2. Run the script:
-\```
+```
 python main.py
-\```
+```
 
 The program will:
 
@@ -105,10 +105,10 @@ The program will:
 - Display a **Prompt & Metadata** window
 - Stream a **Live Preview** of the evolving SDXL image
 - Save each final output to:
-\```
+```
 generated_images/generated_YYYYMMDD-HHMMSS.png
 generated_images/generated_YYYYMMDD-HHMMSS.txt
-\```
+```
 
 Press **Q** in any window to exit.
 
