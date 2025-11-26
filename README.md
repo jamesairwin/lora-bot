@@ -2,78 +2,150 @@
 
 ## Description
 
-**SDXL Cut-Up LoRA Generator** is an automated image-generation system that uses **Stable Diffusion XL (SDXL)** running in **Automatic1111** together with a **custom LoRA** trained on synthetic Blender renders.  
-Each Blender render in the training dataset includes **alt-text POV descriptions**, and these textual descriptions become a **text bank** from which the Python script builds new prompts using a *cut-up* generative technique.
+This project automatically generates images in **Stable Diffusion XL (SDXL)** using **Automatic1111** and a custom LoRA. The LoRA is trained on synthetic images rendered in Blender. Each image has POV descriptions or alt-text, which are stored in a text bank. The script cuts up these fragments and recombines them to form prompts, generating unique images each iteration.
 
-The script automatically:
-
-- Loads POV/descriptive text fragments  
-- Cuts, recombines, and shuffles them  
-- Generates prompts in the format:  
-  **“A Blender render of {fragments}, digital texture.”**  
-- Sends the prompt to Automatic1111 via the **txt2img API**  
-- Applies your custom LoRA with a specified weight  
-- Shows a **live evolving preview** of the SDXL diffusion process  
-- Displays a **styled prompt window**  
-- Saves the final PNG *with full metadata intact*  
-- Saves a matching `.txt` metadata file  
-- Loops indefinitely to produce an evolving stream of images
-
-This project is intended for artistic, generative, or installation-based workflows requiring continuous, algorithmic production of images from textual recombination.
-
----
+The project demonstrates Python integration with Automatic1111's API, live image previews, and prompt metadata tracking.
 
 ## Table of Contents
-1. [Description](#description)  
-2. [Installation](#installation)  
-3. [Usage](#usage)  
-4. [Requirements for Automatic1111](#requirements-for-automatic1111)
-
----
+1. [Description](#description)
+2. [Installation](#installation)
+3. [Usage](#usage)
+4. [Repository Structure](#repository-structure)
+5. [Notes](#notes)
 
 ## Installation
 
-1. **Clone this repository:**
+1. Clone this repository:
+\```
+git clone https://github.com/yourusername/sdxl-cutup-lora-generator.git
+\```
 
-   ```bash
-   git clone https://github.com/yourusername/sdxl-cutup-lora-generator.git
-   ```
-   
-2. **Navigate to the project directory:**
+2. Navigate to the project directory:
+\```
+cd sdxl-cutup-lora-generator
+\```
 
-    ```bash
-    cd sdxl-cutup-lora-generator
-    ```
-
-3. **Set up a virtual environment (recommended):**
-
-   ```bash
-   python -m venv venv
-   ```
-
+3. Set up a virtual environment (recommended):
+\```
+python -m venv venv
+\```
 
 4. **Activate the virtual environment:**
 
-Windows:
-
+**Windows:**
+\```
 .\venv\Scripts\activate
+\```
 
-
-macOS/Linux:
-
+**macOS/Linux:**
+\```
 source venv/bin/activate
+\```
 
-
-Install Python dependencies:
-
+5. Install Python dependencies:
+\```
 pip install -r requirements.txt
+\```
 
+6. Add your text bank:
 
-Add your text bank:
-
-Create a file named text_bank.txt in the project root.
-Each line should be a descriptive fragment taken from your POV alt-text dataset, e.g.:
-
+Create a file named `text_bank.txt` in the project root. Each line should be a descriptive fragment taken from your POV alt-text dataset. Example:
+\```
 reflective polymer surface catching occlusion shadows, volumetric haze
 matte sandstone lattice structure viewed from the ground looking upward
 bioluminescent surface glow diffusing across curved geometry
+\```
+
+The script will automatically mix and recombine these fragments.
+
+7. Add your LoRA weight:
+
+Copy your `.safetensors` LoRA file into:
+\```
+stable-diffusion-webui/models/Lora/
+\```
+
+The script expects the file name:
+\```
+digital_texture-000008.safetensors
+\```
+
+(Change this in the script if your file differs.)
+
+## Usage
+
+1. Start Automatic1111 with API mode enabled:
+
+**Windows:**
+\```
+webui-user.bat --api
+\```
+
+**macOS/Linux:**
+\```
+./webui.sh --api
+\```
+
+The script uses:
+\```
+http://127.0.0.1:7860
+\```
+
+Enable progress preview in Automatic1111 (recommended):
+**Settings → API → ✔ Allow progress images**
+
+2. Run the script:
+\```
+python main.py
+\```
+
+The program will:
+
+- Build a new cut-up prompt for each iteration
+- Display a **Prompt & Metadata** window
+- Stream a **Live Preview** of the evolving SDXL image
+- Save each final output to:
+\```
+generated_images/generated_YYYYMMDD-HHMMSS.png
+generated_images/generated_YYYYMMDD-HHMMSS.txt
+\```
+
+Press **Q** in any window to exit.
+
+## Requirements for Automatic1111
+
+Before running the script, ensure:
+
+- **Stable Diffusion XL Base 1.0** is installed
+- Optional: **SDXL Refiner**
+- Your LoRA is placed in `/models/Lora/`
+- API mode is enabled using `--api`
+- Progress images are enabled (for live preview)
+
+## Recommended Settings Used by the Script
+
+- Sampler: `DPM++ 2M Karras` (auto-resolved via API)
+- Resolution: 960×1080
+- CFG Scale: 17
+- Steps: 50
+- LoRA Weight: 1.0
+- Scheduler: Automatic
+- Seed: 252479142 (modify or randomise as desired)
+
+## Repository Structure
+
+```
+sdxl-cutup-lora-generator/
+│
+├── main.py
+├── text_bank.txt
+├── requirements.txt
+├── README.md
+└── generated_images/
+```
+
+## Notes
+
+- The script loops indefinitely and is suitable for generative installations.
+- PNGs are saved exactly as generated by Automatic1111, preserving embedded metadata.
+- A separate `.txt` file is saved for each image, enabling easy external cataloguing or reuse.
