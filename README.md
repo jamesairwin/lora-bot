@@ -2,7 +2,7 @@
 
 ## Description
 
-This is an early, local version of the **LoRA-Bot**, a networked generative text-to-image (t2i) stream that can be viewed at [surfacecollider.net/lora-bot](https://surfacecollider.net/lora-bot/).
+This repository contains an early, local version of **LoRA Bot**, a networked generative text-to-image (t2i) stream. The live work runs at [surfacecollider.net/lora-bot](https://surfacecollider.net/lora-bot/). This version runs on your own computer.
 
 The project automatically generates images in **Stable Diffusion XL (SDXL)** using [**Automatic1111**](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and a custom LoRA. The LoRA is trained on synthetic images rendered in Blender and Three.js.
 
@@ -12,11 +12,31 @@ You can run the project locally on a desktop computer or laptop by following the
 
 ## Table of Contents
 1. [Description](#description)
-2. [Models](#models)
-3. [Installation](#installation)
-4. [Usage](#usage)
-5. [Repository Structure](#repository-structure)
-6. [Notes](#notes)
+2. [The Local Version and the Live Work](#the-local-version-and-the-live-work)
+3. [Models](#models)
+4. [Installation](#installation)
+5. [Usage](#usage)
+6. [Requirements for Automatic1111](#requirements-for-automatic1111)
+7. [Recommended Settings Used by the Script](#recommended-settings-used-by-the-script)
+8. [Repository Structure](#repository-structure)
+9. [Notes](#notes)
+
+## The Local Version and the Live Work
+
+This repository and the live LoRA Bot are linked, but they are not the same piece of software.
+
+**Shared by both:**
+
+- The custom LoRA, trained on 30 Blender renders and Three.js screenshots
+- `text_bank.txt`, the POV descriptions of those 30 images
+- The cut-up method: each prompt is assembled from fragments of those descriptions
+- `dataset.json`, the training images and their alt-text. The Training Dataset gallery on the LoRA Bot page loads this file directly from this repository.
+
+**Different:**
+
+- **Where it runs:** the live work runs on an NVIDIA 3090 GPU, rented on demand through a VPS for each generation session. This version runs through Automatic1111 on your own machine.
+- **How it starts:** the live work is triggered from the LoRA Bot page and is password protected. This version starts when you run `main.py` and loops until you press **Q**.
+- **Where the images go:** the live work streams its images to the web page. This version shows them in a local preview window and saves each one to `generated_images/`.
 
 ## Models
 
@@ -29,118 +49,123 @@ The model weights are not included in this repository. Download them from Huggin
 ## Installation
 
 1. Clone this repository:
-```
-git clone https://github.com/jamesairwin/lora-bot.git
-```
+
+   ```
+   git clone https://github.com/jamesairwin/lora-bot.git
+   ```
 
 2. Navigate to the project directory:
-```
-cd lora-bot
-```
+
+   ```
+   cd lora-bot
+   ```
 
 3. Set up a virtual environment (recommended):
-```
-python -m venv venv
-```
 
-4. **Activate the virtual environment:**
+   ```
+   python -m venv venv
+   ```
 
-**Windows:**
-```
-.\venv\Scripts\activate
-```
+4. Activate the virtual environment:
 
-**macOS/Linux:**
-```
-source venv/bin/activate
-```
+   **Windows:**
+
+   ```
+   .\venv\Scripts\activate
+   ```
+
+   **macOS/Linux:**
+
+   ```
+   source venv/bin/activate
+   ```
 
 5. Install Python dependencies:
-```
-pip install -r requirements.txt
-```
+
+   ```
+   pip install -r requirements.txt
+   ```
 
 6. The text bank:
 
-The repository includes `text_bank.txt`, which contains the POV descriptions of the 30 training images, one per line. Each line is a comma-separated description, for example:
-```
-a glossy, crumpled surface, with red, yellow and blue worm-like shapes on a grey background. ...
-```
+   The repository includes `text_bank.txt`, which contains the POV descriptions of the 30 training images, one per line. Each line is a comma-separated description, for example:
 
-For each prompt, the script picks one comma-separated fragment from each description, shuffles them, and joins six of them into the template `A Blender render of ..., digital texture.` No setup is needed. To use your own descriptions, replace the lines in `text_bank.txt`, keeping one description per line.
+   ```
+   a glossy, crumpled surface, with red, yellow and blue worm-like shapes on a grey background. ...
+   ```
+
+   For each prompt, the script picks one comma-separated fragment from each description, shuffles them, and joins six of them into the template `A Blender render of ..., digital texture.` No setup is needed. To use your own descriptions, replace the lines in `text_bank.txt`, keeping one description per line.
 
 7. Add the LoRA:
 
-Download [digital_texture-000008.safetensors](https://huggingface.co/surfacecollider/vastai-lora/blob/main/digital_texture-000008.safetensors) (see [Models](#models)) and copy it into:
-```
-stable-diffusion-webui/models/Lora/
-```
+   Download [digital_texture-000008.safetensors](https://huggingface.co/surfacecollider/vastai-lora/blob/main/digital_texture-000008.safetensors) (see [Models](#models)) and copy it into:
 
-The script expects the file name:
-```
-digital_texture-000008.safetensors
-```
+   ```
+   stable-diffusion-webui/models/Lora/
+   ```
 
-(Change `lora_name` in `main.py` if you use a different LoRA.)
+   The script expects the file name `digital_texture-000008.safetensors`. Change `lora_name` in `main.py` if you use a different LoRA.
 
 8. Add the base model:
 
-Download `sd_xl_base_1.0.safetensors` from [Stable Diffusion XL Base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) and copy it into:
-```
-stable-diffusion-webui/models/Stable-diffusion/
-```
+   Download `sd_xl_base_1.0.safetensors` from [Stable Diffusion XL Base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) and copy it into:
 
-Select it as the checkpoint in Automatic1111 before running the script.
+   ```
+   stable-diffusion-webui/models/Stable-diffusion/
+   ```
+
+   Select it as the checkpoint in Automatic1111 before running the script.
 
 ## Usage
 
 1. Start Automatic1111 with API mode enabled:
 
-**Windows:**
-```
-webui-user.bat --api
-```
+   **Windows:** open `webui-user.bat` in a text editor, change the `COMMANDLINE_ARGS` line to:
 
-**macOS/Linux:**
-```
-./webui.sh --api
-```
+   ```
+   set COMMANDLINE_ARGS=--api
+   ```
 
-The script uses:
-```
-http://127.0.0.1:7860
-```
+   then run `webui-user.bat`.
 
-Enable progress preview in Automatic1111 (recommended):
-**Settings → API → ✔ Allow progress images**
+   **macOS/Linux:**
+
+   ```
+   ./webui.sh --api
+   ```
+
+   The script connects to Automatic1111 at `http://127.0.0.1:7860`.
+
+   The script's **Live Preview** window reads Automatic1111's in-progress image, so keep live previews enabled in Automatic1111's settings (they are on by default).
 
 2. Run the script:
-```
-python main.py
-```
 
-The program will:
+   ```
+   python main.py
+   ```
 
-- Build a new cut-up prompt for each iteration
-- Display a **Prompt & Metadata** window
-- Stream a **Live Preview** of the evolving SDXL image
-- Save each final output to:
-```
-generated_images/generated_YYYYMMDD-HHMMSS.png
-generated_images/generated_YYYYMMDD-HHMMSS.txt
-```
+   The program will:
 
-Press **Q** in any window to exit.
+   - Build a new cut-up prompt for each iteration
+   - Display a **Prompt & Metadata** window
+   - Stream a **Live Preview** of the evolving SDXL image
+   - Save each final output to:
+
+     ```
+     generated_images/generated_YYYYMMDD-HHMMSS.png
+     generated_images/generated_YYYYMMDD-HHMMSS.txt
+     ```
+
+   Press **Q** in any window to exit.
 
 ## Requirements for Automatic1111
 
 Before running the script, ensure:
 
 - **Stable Diffusion XL Base 1.0** is installed in `models/Stable-diffusion/` and selected as the checkpoint
-- Optional: **SDXL Refiner**
 - The LoRA is placed in `models/Lora/`
 - API mode is enabled using `--api`
-- Progress images are enabled (for live preview)
+- Live previews are enabled (for the Live Preview window)
 
 ## Recommended Settings Used by the Script
 
@@ -166,7 +191,7 @@ lora-bot/
 ```
 
 - `text_bank.txt`: the POV descriptions that `main.py` cuts up into prompts.
-- `dataset.json`: the 30 training images' filenames paired with their full alt-text. It is not used by `main.py`. The image gallery at [surfacecollider.net/lora-bot](https://surfacecollider.net/lora-bot/) loads it directly from this repository, so it must keep its name and location.
+- `dataset.json`: the 30 training images' filenames paired with their full alt-text. It is not used by `main.py`. The Training Dataset gallery at [surfacecollider.net/lora-bot](https://surfacecollider.net/lora-bot/) loads it directly from this repository, so it must keep its name and location.
 
 ## Notes
 
