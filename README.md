@@ -12,10 +12,19 @@ You can run the project locally on a desktop computer or laptop by following the
 
 ## Table of Contents
 1. [Description](#description)
-2. [Installation](#installation)
-3. [Usage](#usage)
-4. [Repository Structure](#repository-structure)
-5. [Notes](#notes)
+2. [Models](#models)
+3. [Installation](#installation)
+4. [Usage](#usage)
+5. [Repository Structure](#repository-structure)
+6. [Notes](#notes)
+
+## Models
+
+The model weights are not included in this repository. Download them from Hugging Face:
+
+- **LoRA:** [digital_texture-000008.safetensors](https://huggingface.co/surfacecollider/vastai-lora/blob/main/digital_texture-000008.safetensors), trained on the Blender renders and Three.js screenshots described in `text_bank.txt`
+- **Base model:** [Stable Diffusion XL Base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) (`sd_xl_base_1.0.safetensors`), by Stability AI
+- **VAE (optional):** [SDXL VAE fp16 fix](https://huggingface.co/madebyollin/sdxl-vae-fp16-fix), by madebyollin, which avoids NaN/black images when running SDXL in half precision
 
 ## Installation
 
@@ -51,20 +60,18 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-6. Add your text bank:
+6. The text bank:
 
-Create a file named `text_bank.txt` in the project root. Each line should be a descriptive fragment taken from your POV alt-text dataset. Example:
+The repository includes `text_bank.txt`, which contains the POV descriptions of the 30 training images, one per line. Each line is a comma-separated description, for example:
 ```
-reflective polymer surface catching occlusion shadows, volumetric haze
-matte sandstone lattice structure viewed from the ground looking upward
-bioluminescent surface glow diffusing across curved geometry
+a glossy, crumpled surface, with red, yellow and blue worm-like shapes on a grey background. ...
 ```
 
-The script will automatically mix and recombine these fragments.
+For each prompt, the script picks one comma-separated fragment from each description, shuffles them, and joins six of them into the template `A Blender render of ..., digital texture.` No setup is needed. To use your own descriptions, replace the lines in `text_bank.txt`, keeping one description per line.
 
-7. Add your LoRA weight:
+7. Add the LoRA:
 
-Copy your `.safetensors` LoRA file into:
+Download [digital_texture-000008.safetensors](https://huggingface.co/surfacecollider/vastai-lora/blob/main/digital_texture-000008.safetensors) (see [Models](#models)) and copy it into:
 ```
 stable-diffusion-webui/models/Lora/
 ```
@@ -74,7 +81,16 @@ The script expects the file name:
 digital_texture-000008.safetensors
 ```
 
-(Change this in the script if your file differs.)
+(Change `lora_name` in `main.py` if you use a different LoRA.)
+
+8. Add the base model:
+
+Download `sd_xl_base_1.0.safetensors` from [Stable Diffusion XL Base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) and copy it into:
+```
+stable-diffusion-webui/models/Stable-diffusion/
+```
+
+Select it as the checkpoint in Automatic1111 before running the script.
 
 ## Usage
 
@@ -120,9 +136,9 @@ Press **Q** in any window to exit.
 
 Before running the script, ensure:
 
-- **Stable Diffusion XL Base 1.0** is installed
+- **Stable Diffusion XL Base 1.0** is installed in `models/Stable-diffusion/` and selected as the checkpoint
 - Optional: **SDXL Refiner**
-- Your LoRA is placed in `/models/Lora/`
+- The LoRA is placed in `models/Lora/`
 - API mode is enabled using `--api`
 - Progress images are enabled (for live preview)
 
@@ -139,13 +155,13 @@ Before running the script, ensure:
 ## Repository Structure
 
 ```
-sdxl-cutup-lora-generator/
+lora-bot/
 │
 ├── main.py
 ├── text_bank.txt
 ├── requirements.txt
 ├── README.md
-└── generated_images/
+└── generated_images/    (created on first run)
 ```
 
 ## Notes
