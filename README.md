@@ -159,10 +159,14 @@ lora-bot/
 │
 ├── main.py
 ├── text_bank.txt
+├── dataset.json
 ├── requirements.txt
 ├── README.md
 └── generated_images/    (created on first run)
 ```
+
+- `text_bank.txt`: the POV descriptions that `main.py` cuts up into prompts.
+- `dataset.json`: the 30 training images' filenames paired with their full alt-text. It is not used by `main.py`. The image gallery at [surfacecollider.net/lora-bot](https://surfacecollider.net/lora-bot/) loads it directly from this repository, so it must keep its name and location.
 
 ## Notes
 
