@@ -2,9 +2,13 @@
 
 ## Description
 
-This project automatically generates images in **Stable Diffusion XL (SDXL)** using **Automatic1111** and a custom LoRA. The LoRA is trained on synthetic images rendered in Blender. Each image has POV descriptions or alt-text, which are stored in a text bank. The script cuts up these fragments and recombines them to form prompts, generating unique images each iteration.
+This is an early, local version of the **LoRA-Bot**, a networked generative text-to-image (t2i) stream that can be viewed at [surfacecollider.net/lora-bot](https://surfacecollider.net/lora-bot/).
 
-The project demonstrates Python integration with Automatic1111's API, live image previews, and prompt metadata tracking.
+The project automatically generates images in **Stable Diffusion XL (SDXL)** using [**Automatic1111**](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and a custom LoRA. The LoRA is trained on synthetic images rendered in Blender and Three.js.
+
+Each image has a POV description or alt-text, which is stored in a text bank. The script cuts up these passages of writing into fragments and recombines them to form prompts, generating a unique image each iteration.
+
+You can run the project locally on a desktop computer or laptop by following the instructions below.
 
 ## Table of Contents
 1. [Description](#description)
