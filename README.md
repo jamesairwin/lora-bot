@@ -4,7 +4,7 @@
 
 This repository contains an early, local version of **LoRA Bot**, a networked generative text-to-image (t2i) stream. The live work runs at [surfacecollider.net/lora-bot](https://surfacecollider.net/lora-bot/). This version runs on your own computer.
 
-The project automatically generates images in **Stable Diffusion XL (SDXL)** using [**Automatic1111**](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and a custom LoRA. The LoRA is trained on synthetic images rendered in Blender and Three.js.
+The project automatically generates images in **Stable Diffusion XL (SDXL)** using [**Automatic1111**](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and a custom LoRA. The LoRA is trained on synthetic images rendered in Blender and three.js.
 
 Each image has a POV description or alt-text, which is stored in a text bank. The script cuts up these passages of writing into fragments and recombines them to form prompts, generating a unique image each iteration.
 
@@ -36,7 +36,7 @@ This repository and the live LoRA Bot are linked, but they are not the same piec
 
 **Shared by both:**
 
-- The custom LoRA, trained on 30 Blender renders and Three.js screenshots
+- The custom LoRA, trained on 30 Blender renders and three.js screenshots
 - `text_bank.txt`, the POV descriptions of those 30 images
 - The cut-up method: each prompt is assembled from fragments of those descriptions
 - `dataset.json`, the training images and their alt-text. The Training Dataset gallery on the LoRA Bot page loads this file directly from this repository.
@@ -51,7 +51,7 @@ This repository and the live LoRA Bot are linked, but they are not the same piec
 
 The model weights are not included in this repository. Download them from Hugging Face:
 
-- **LoRA:** [digital_texture-000008.safetensors](https://huggingface.co/surfacecollider/vastai-lora/blob/main/digital_texture-000008.safetensors), trained on the Blender renders and Three.js screenshots described in `text_bank.txt`
+- **LoRA:** [digital_texture-000008.safetensors](https://huggingface.co/surfacecollider/vastai-lora/blob/main/digital_texture-000008.safetensors), trained on the Blender renders and three.js screenshots described in `text_bank.txt`
 - **Base model:** [Stable Diffusion XL Base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) (`sd_xl_base_1.0.safetensors`), by Stability AI
 - **VAE (optional):** [SDXL VAE fp16 fix](https://huggingface.co/madebyollin/sdxl-vae-fp16-fix), by madebyollin, which avoids NaN/black images when running SDXL in half precision
 
